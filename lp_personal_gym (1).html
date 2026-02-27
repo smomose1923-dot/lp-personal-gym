@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>APEX GYM - 完全個室パーソナルトレーニング</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,300;0,400;0,600;0,700;1,300&family=Noto+Sans+JP:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --red: #E63329;
+    --red-dark: #B82820;
+    --white: #FFFFFF;
+    --off-white: #F5F5F3;
+    --black: #0C0C0C;
+    --dark: #141414;
+    --mid: #1C1C1C;
+    --gray: #2A2A2A;
+    --text-muted: #888;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: 'Barlow', sans-serif;
+    font-weight: 300;
+    overflow-x: hidden;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    padding: 20px 48px;
+    display: flex; justify-content: space-between; align-items: center;
+    background: rgba(12,12,12,0.95);
+    border-bottom: 1px solid rgba(230,51,41,0.2);
+  }
+  .nav-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px; letter-spacing: 0.15em;
+    color: var(--white);
+  }
+  .nav-logo span { color: var(--red); }
+  .nav-links { display: flex; gap: 36px; list-style: none; }
+  .nav-links a {
+    font-size: 12px; letter-spacing: 0.15em;
+    text-transform: uppercase; color: rgba(255,255,255,0.6);
+    text-decoration: none; transition: color 0.3s;
+    font-weight: 400;
+  }
+  .nav-links a:hover { color: var(--red); }
+  .nav-cta {
+    padding: 10px 28px;
+    background: var(--red); color: var(--white);
+    font-size: 11px; letter-spacing: 0.15em;
+    text-transform: uppercase; text-decoration: none;
+    font-weight: 600; transition: background 0.3s;
+  }
+  .nav-cta:hover { background: var(--red-dark); }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex; align-items: center;
+    position: relative; overflow: hidden;
+    padding-top: 80px;
+  }
+  .hero-bg {
+    position: absolute; inset: 0;
+    background: linear-gradient(105deg, var(--black) 45%, #1A0A09 100%);
+  }
+  .hero-grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(230,51,41,0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(230,51,41,0.06) 1px, transparent 1px);
+    background-size: 40px 40px;
+    mask-image: radial-gradient(ellipse at 80% 50%, black 30%, transparent 70%);
+  }
+  .hero-accent {
+    position: absolute; right: -100px; top: 50%;
+    transform: translateY(-50%);
+    width: 600px; height: 600px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(230,51,41,0.15) 0%, transparent 70%);
+  }
+  .hero-content {
+    position: relative; z-index: 2;
+    padding: 0 10vw;
+  }
+  .hero-tag {
+    display: inline-flex; align-items: center; gap: 12px;
+    padding: 8px 20px;
+    border: 1px solid rgba(230,51,41,0.4);
+    margin-bottom: 40px;
+    opacity: 0; animation: fadeUp 0.8s 0.2s forwards;
+  }
+  .hero-tag span {
+    font-size: 11px; letter-spacing: 0.2em;
+    text-transform: uppercase; color: var(--red);
+    font-weight: 600;
+  }
+  .hero-tag::before {
+    content: '';
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--red);
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(1.5); }
+  }
+  .hero-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(64px, 10vw, 130px);
+    line-height: 0.9;
+    letter-spacing: 0.02em;
+    margin-bottom: 32px;
+    opacity: 0; animation: fadeUp 0.8s 0.4s forwards;
+  }
+  .hero-title .line-red { color: var(--red); display: block; }
+  .hero-title .line-outline {
+    display: block;
+    -webkit-text-stroke: 1px rgba(255,255,255,0.3);
+    color: transparent;
+  }
+  .hero-sub {
+    font-size: 16px; line-height: 1.9;
+    color: rgba(255,255,255,0.55);
+    max-width: 480px; margin-bottom: 52px;
+    opacity: 0; animation: fadeUp 0.8s 0.6s forwards;
+  }
+  .hero-btns {
+    display: flex; gap: 20px; align-items: center;
+    flex-wrap: wrap;
+    opacity: 0; animation: fadeUp 0.8s 0.8s forwards;
+  }
+  .btn-red {
+    padding: 18px 48px;
+    background: var(--red); color: var(--white);
+    font-size: 12px; letter-spacing: 0.2em;
+    text-transform: uppercase; text-decoration: none;
+    font-weight: 600; transition: all 0.3s;
+    clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px));
+  }
+  .btn-red:hover { background: var(--red-dark); transform: translateY(-2px); }
+  .btn-outline {
+    padding: 17px 40px;
+    border: 1px solid rgba(255,255,255,0.3);
+    color: rgba(255,255,255,0.7);
+    font-size: 12px; letter-spacing: 0.2em;
+    text-transform: uppercase; text-decoration: none;
+    font-weight: 400; transition: all 0.3s;
+  }
+  .btn-outline:hover { border-color: var(--red); color: var(--red); }
+
+  .hero-stats {
+    position: absolute; right: 10vw; bottom: 60px;
+    display: flex; gap: 48px;
+    opacity: 0; animation: fadeIn 1s 1s forwards;
+  }
+  .stat { text-align: center; }
+  .stat-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 48px; color: var(--red);
+    line-height: 1;
+  }
+  .stat-label {
+    font-size: 10px; letter-spacing: 0.2em;
+    text-transform: uppercase; color: var(--text-muted);
+    margin-top: 4px;
+  }
+
+  /* RESULTS */
+  .section-results {
+    padding: 120px 10vw;
+    background: var(--dark);
+  }
+  .results-header {
+    display: flex; justify-content: space-between;
+    align-items: flex-end; margin-bottom: 72px;
+  }
+  .results-header .label {
+    font-size: 11px; letter-spacing: 0.3em;
+    text-transform: uppercase; color: var(--red);
+    margin-bottom: 16px;
+  }
+  .results-header h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(36px, 5vw, 64px);
+    line-height: 1; letter-spacing: 0.05em;
+  }
+  .results-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 2px;
+  }
+  .result-card {
+    background: var(--mid);
+    padding: 48px 36px;
+    position: relative; overflow: hidden;
+    transition: background 0.3s;
+  }
+  .result-card:hover { background: var(--gray); }
+  .result-card::after {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0;
+    height: 3px; background: var(--red);
+    transform: scaleX(0); transform-origin: left;
+    transition: transform 0.4s;
+  }
+  .result-card:hover::after { transform: scaleX(1); }
+  .result-period {
+    font-size: 10px; letter-spacing: 0.2em;
+    text-transform: uppercase; color: var(--text-muted);
+    margin-bottom: 20px;
+  }
+  .result-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 56px; color: var(--red);
+    line-height: 1; margin-bottom: 8px;
+  }
+  .result-unit { font-size: 20px; }
+  .result-desc {
+    font-size: 13px; line-height: 1.8;
+    color: rgba(255,255,255,0.6);
+  }
+
+  /* PROGRAM */
+  .section-program {
+    padding: 120px 10vw;
+  }
+  .program-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 40px; margin-top: 60px;
+  }
+  .program-card {
+    border: 1px solid rgba(255,255,255,0.08);
+    padding: 48px;
+    position: relative; overflow: hidden;
+    transition: border-color 0.3s;
+  }
+  .program-card:hover { border-color: rgba(230,51,41,0.4); }
+  .program-card.featured {
+    border-color: var(--red);
+    background: linear-gradient(135deg, rgba(230,51,41,0.05), transparent);
+  }
+  .program-badge {
+    position: absolute; top: 24px; right: 24px;
+    background: var(--red);
+    padding: 4px 14px;
+    font-size: 10px; letter-spacing: 0.2em;
+    text-transform: uppercase; font-weight: 600;
+  }
+  .program-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 80px; color: rgba(230,51,41,0.1);
+    line-height: 1; margin-bottom: 20px;
+  }
+  .program-name {
+    font-family: 'Barlow', sans-serif;
+    font-size: 22px; font-weight: 700;
+    letter-spacing: 0.05em; margin-bottom: 16px;
+    text-transform: uppercase;
+  }
+  .program-desc {
+    font-size: 13px; line-height: 2;
+    color: rgba(255,255,255,0.55); margin-bottom: 32px;
+  }
+  .program-price {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 40px; color: var(--red);
+    margin-bottom: 4px;
+  }
+  .program-price-note {
+    font-size: 11px; color: var(--text-muted);
+  }
+  .program-features {
+    list-style: none; margin-top: 28px;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    padding-top: 28px;
+  }
+  .program-features li {
+    font-size: 12px; padding: 8px 0;
+    color: rgba(255,255,255,0.65);
+    display: flex; align-items: center; gap: 12px;
+  }
+  .program-features li::before {
+    content: '→';
+    color: var(--red); font-size: 14px;
+    flex-shrink: 0;
+  }
+
+  /* TRAINER */
+  .section-trainer {
+    padding: 120px 10vw;
+    background: var(--dark);
+  }
+  .trainer-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 80px; align-items: center; margin-top: 60px;
+  }
+  .trainer-visual {
+    position: relative;
+  }
+  .trainer-img {
+    aspect-ratio: 3/4;
+    background: linear-gradient(135deg, #1A1010, #2A1515);
+    display: flex; align-items: center; justify-content: center;
+    position: relative; overflow: hidden;
+  }
+  .trainer-img::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 40% 30%, rgba(230,51,41,0.1), transparent 55%);
+  }
+  .trainer-img-text {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 100px; color: rgba(230,51,41,0.1);
+    letter-spacing: 0.05em; text-align: center;
+  }
+  .trainer-border {
+    position: absolute; bottom: -20px; right: -20px;
+    width: 80%; height: 80%;
+    border: 1px solid rgba(230,51,41,0.3);
+  }
+  .trainer-tag {
+    position: absolute; top: 24px; left: -12px;
+    background: var(--red); padding: 8px 24px;
+    font-size: 11px; letter-spacing: 0.2em;
+    text-transform: uppercase; font-weight: 600;
+  }
+  .trainer-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 52px; letter-spacing: 0.05em;
+    line-height: 1; margin-bottom: 8px;
+  }
+  .trainer-title {
+    font-size: 13px; color: var(--red);
+    letter-spacing: 0.15em; text-transform: uppercase;
+    margin-bottom: 28px;
+  }
+  .trainer-bio {
+    font-size: 14px; line-height: 2.1;
+    color: rgba(255,255,255,0.6); margin-bottom: 36px;
+  }
+  .trainer-certs {
+    display: flex; flex-wrap: wrap; gap: 10px;
+  }
+  .cert {
+    padding: 6px 16px;
+    border: 1px solid rgba(230,51,41,0.3);
+    font-size: 11px; color: rgba(255,255,255,0.6);
+    letter-spacing: 0.1em;
+  }
+
+  /* FLOW */
+  .section-flow {
+    padding: 120px 10vw;
+  }
+  .flow-steps {
+    display: grid; grid-template-columns: repeat(5, 1fr);
+    gap: 0; margin-top: 60px;
+    position: relative;
+  }
+  .flow-steps::before {
+    content: '';
+    position: absolute;
+    top: 32px; left: calc(10% + 32px); right: calc(10% + 32px);
+    height: 1px; background: rgba(230,51,41,0.3);
+  }
+  .flow-step {
+    text-align: center; padding: 0 16px;
+  }
+  .flow-num {
+    width: 64px; height: 64px;
+    border: 1px solid var(--red);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 24px; color: var(--red);
+    margin: 0 auto 24px;
+    background: var(--black);
+    position: relative; z-index: 1;
+  }
+  .flow-title {
+    font-size: 14px; font-weight: 700;
+    letter-spacing: 0.05em; margin-bottom: 12px;
+    text-transform: uppercase;
+  }
+  .flow-desc {
+    font-size: 11px; line-height: 1.9;
+    color: var(--text-muted);
+  }
+
+  /* CTA */
+  .section-cta {
+    padding: 120px 10vw;
+    background: var(--red);
+    position: relative; overflow: hidden;
+  }
+  .section-cta::before {
+    content: 'APEX';
+    position: absolute;
+    right: -60px; top: 50%; transform: translateY(-50%);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 300px; color: rgba(0,0,0,0.1);
+    line-height: 1; white-space: nowrap;
+  }
+  .cta-inner {
+    position: relative; z-index: 1;
+    display: grid; grid-template-columns: 1fr auto;
+    gap: 60px; align-items: center;
+  }
+  .cta-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(40px, 6vw, 72px);
+    line-height: 0.95; letter-spacing: 0.02em;
+  }
+  .cta-sub {
+    font-size: 16px; margin-top: 16px;
+    color: rgba(255,255,255,0.8); line-height: 1.8;
+  }
+  .cta-box {
+    background: var(--black);
+    padding: 48px 40px; text-align: center;
+    min-width: 280px;
+  }
+  .cta-offer {
+    font-size: 11px; letter-spacing: 0.2em;
+    text-transform: uppercase; color: var(--red);
+    margin-bottom: 16px;
+  }
+  .cta-price {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 64px; line-height: 1;
+    margin-bottom: 4px;
+  }
+  .cta-price-note {
+    font-size: 12px; color: var(--text-muted);
+    margin-bottom: 32px;
+  }
+  .btn-white {
+    display: block; width: 100%;
+    padding: 16px;
+    background: var(--white); color: var(--black);
+    font-size: 12px; letter-spacing: 0.2em;
+    text-transform: uppercase; text-decoration: none;
+    font-weight: 700; transition: all 0.3s;
+    margin-bottom: 12px;
+  }
+  .btn-white:hover { background: var(--off-white); }
+  .cta-note {
+    font-size: 10px; color: var(--text-muted);
+    letter-spacing: 0.1em;
+  }
+
+  /* FOOTER */
+  footer {
+    padding: 48px 10vw;
+    background: var(--black);
+    border-top: 1px solid rgba(255,255,255,0.06);
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .footer-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 24px; letter-spacing: 0.15em;
+  }
+  .footer-logo span { color: var(--red); }
+  .footer-copy { font-size: 11px; color: var(--text-muted); }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; } to { opacity: 1; }
+  }
+
+  .reveal {
+    opacity: 0; transform: translateY(28px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .reveal-delay-1 { transition-delay: 0.1s; }
+  .reveal-delay-2 { transition-delay: 0.2s; }
+  .reveal-delay-3 { transition-delay: 0.3s; }
+
+  @media (max-width: 900px) {
+    nav { padding: 16px 24px; }
+    .nav-links { display: none; }
+    .hero-stats { display: none; }
+    .results-grid { grid-template-columns: 1fr 1fr; }
+    .program-grid, .trainer-grid { grid-template-columns: 1fr; }
+    .flow-steps { grid-template-columns: 1fr; }
+    .flow-steps::before { display: none; }
+    .cta-inner { grid-template-columns: 1fr; }
+    footer { flex-direction: column; gap: 12px; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">APE<span>X</span></div>
+  <ul class="nav-links">
+    <li><a href="#results">Results</a></li>
+    <li><a href="#program">Program</a></li>
+    <li><a href="#trainer">Trainer</a></li>
+    <li><a href="#flow">Flow</a></li>
+  </ul>
+  <a href="reservation_gym.html" class="nav-cta">無料体験</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-accent"></div>
+  <div class="hero-content">
+    <div class="hero-tag"><span>完全個室 · マンツーマン指導</span></div>
+    <h1 class="hero-title">
+      <span class="line-red">限界を</span>
+      <span>超えろ。</span>
+      <span class="line-outline">APEX GYM</span>
+    </h1>
+    <p class="hero-sub">
+      あなたの目標に特化した完全個別プログラム。<br>
+      プロトレーナーとマンツーマンで、最短で結果を出す。
+    </p>
+    <div class="hero-btns">
+      <a href="reservation_gym.html" class="btn-red">無料体験を予約する</a>
+      <a href="#program" class="btn-outline">プログラムを見る</a>
+    </div>
+  </div>
+  <div class="hero-stats">
+    <div class="stat">
+      <div class="stat-num">98<span style="font-size:24px;">%</span></div>
+      <div class="stat-label">顧客満足度</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">-12<span style="font-size:24px;">kg</span></div>
+      <div class="stat-label">平均減量（3ヶ月）</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">300<span style="font-size:24px;">+</span></div>
+      <div class="stat-label">達成者数</div>
+    </div>
+  </div>
+</section>
+
+<!-- RESULTS -->
+<section class="section-results" id="results">
+  <div class="results-header reveal">
+    <div>
+      <p class="label">Real Results</p>
+      <h2>数字が証明する<br>圧倒的な実績</h2>
+    </div>
+  </div>
+  <div class="results-grid">
+    <div class="result-card reveal">
+      <p class="result-period">3ヶ月平均</p>
+      <div class="result-num">-12<span class="result-unit">kg</span></div>
+      <p class="result-desc">ダイエット目的のお客様の平均減量数。リバウンドなしの健康的な減量を実現。</p>
+    </div>
+    <div class="result-card reveal reveal-delay-1">
+      <p class="result-period">継続率</p>
+      <div class="result-num">94<span class="result-unit">%</span></div>
+      <p class="result-desc">一般ジムの継続率が30%以下と言われる中、高い継続率を誇ります。</p>
+    </div>
+    <div class="result-card reveal reveal-delay-2">
+      <p class="result-period">満足度調査</p>
+      <div class="result-num">4.9<span class="result-unit">/5</span></div>
+      <p class="result-desc">Google口コミの平均評価。「また来たい」「友人に勧めたい」が多数。</p>
+    </div>
+    <div class="result-card reveal reveal-delay-3">
+      <p class="result-period">累計実績</p>
+      <div class="result-num">300<span class="result-unit">+</span></div>
+      <p class="result-desc">目標達成者数300名突破。ダイエット・筋肥大・健康維持など多様な目標に対応。</p>
+    </div>
+  </div>
+</section>
+
+<!-- PROGRAM -->
+<section class="section-program" id="program">
+  <div class="section-header" style="text-align:left;">
+    <p class="label reveal" style="font-size:11px; letter-spacing:0.3em; text-transform:uppercase; color:var(--red); margin-bottom:16px;">Program</p>
+    <h2 class="reveal reveal-delay-1" style="font-family:'Bebas Neue',sans-serif; font-size:clamp(36px,5vw,60px); letter-spacing:0.05em;">あなたに合わせた<br>専用プログラム</h2>
+  </div>
+  <div class="program-grid">
+    <div class="program-card reveal">
+      <div class="program-num">01</div>
+      <h3 class="program-name">Body Design</h3>
+      <p class="program-desc">ダイエット・ボディメイクに特化したプログラム。食事指導と組み合わせ、最短で理想の体型へ。</p>
+      <div class="program-price">¥55,000<span style="font-size:16px;">/月</span></div>
+      <p class="program-price-note">週2回（月8回）・60分/回</p>
+      <ul class="program-features">
+        <li>完全個別トレーニングプログラム</li>
+        <li>食事・栄養指導込み</li>
+        <li>LINEでの毎日サポート</li>
+        <li>体組成計測（毎回）</li>
+      </ul>
+    </div>
+    <div class="program-card featured reveal reveal-delay-1">
+      <div class="program-badge">人気No.1</div>
+      <div class="program-num">02</div>
+      <h3 class="program-name">Total Transform</h3>
+      <p class="program-desc">週3回の集中トレーニングで最速の変身を実現。本気で変わりたい方向けのプレミアムコース。</p>
+      <div class="program-price">¥79,000<span style="font-size:16px;">/月</span></div>
+      <p class="program-price-note">週3回（月12回）・60分/回</p>
+      <ul class="program-features">
+        <li>完全個別トレーニングプログラム</li>
+        <li>食事・栄養指導込み</li>
+        <li>LINEでの毎日サポート</li>
+        <li>体組成計測（毎回）</li>
+        <li>補講1回/月無料</li>
+        <li>専用アプリで進捗管理</li>
+      </ul>
+    </div>
+    <div class="program-card reveal reveal-delay-2">
+      <div class="program-num">03</div>
+      <h3 class="program-name">Muscle Building</h3>
+      <p class="program-desc">筋肥大・パワーアップに特化。科学的なアプローチで効率的に筋肉を増やします。</p>
+      <div class="program-price">¥55,000<span style="font-size:16px;">/月</span></div>
+      <p class="program-price-note">週2回（月8回）・60分/回</p>
+      <ul class="program-features">
+        <li>筋肥大に特化したプログラム</li>
+        <li>栄養・サプリメント指導</li>
+        <li>フォーム動画フィードバック</li>
+        <li>体組成計測（毎回）</li>
+      </ul>
+    </div>
+    <div class="program-card reveal reveal-delay-3">
+      <div class="program-num">04</div>
+      <h3 class="program-name">Health ＆ Wellness</h3>
+      <p class="program-desc">40代以上向けの健康維持・体力向上プログラム。腰痛・肩こり改善にも対応します。</p>
+      <div class="program-price">¥44,000<span style="font-size:16px;">/月</span></div>
+      <p class="program-price-note">週2回（月8回）・50分/回</p>
+      <ul class="program-features">
+        <li>年齢に合わせた安全なプログラム</li>
+        <li>姿勢改善・体の機能向上</li>
+        <li>セルフケア指導</li>
+        <li>健康状態に合わせた調整</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- TRAINER -->
+<section class="section-trainer" id="trainer">
+  <div class="section-header" style="text-align:left;">
+    <p class="label reveal" style="font-size:11px; letter-spacing:0.3em; text-transform:uppercase; color:var(--red); margin-bottom:16px;">Our Trainer</p>
+    <h2 class="reveal reveal-delay-1" style="font-family:'Bebas Neue',sans-serif; font-size:clamp(36px,5vw,60px); letter-spacing:0.05em;">あなたの目標達成を<br>全力でサポートする</h2>
+  </div>
+  <div class="trainer-grid">
+    <div class="trainer-visual reveal">
+      <div class="trainer-img">
+        <div class="trainer-img-text">APEX</div>
+      </div>
+      <div class="trainer-border"></div>
+      <div class="trainer-tag">Head Trainer</div>
+    </div>
+    <div class="reveal reveal-delay-1">
+      <h2 class="trainer-name">Takeshi Yamada</h2>
+      <p class="trainer-title">Head Personal Trainer / 代表トレーナー</p>
+      <p class="trainer-bio">
+        元プロスポーツ選手として現役引退後、フィットネス業界に転身。10年以上のトレーナー経験を持ち、これまでに300名以上の目標達成をサポート。科学的なアプローチと、一人ひとりに寄り添った指導スタイルで高い評価を得ている。
+      </p>
+      <div class="trainer-certs">
+        <span class="cert">NSCA-CPT</span>
+        <span class="cert">JATI認定</span>
+        <span class="cert">栄養士資格</span>
+        <span class="cert">スポーツ医科学</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FLOW -->
+<section class="section-flow" id="flow">
+  <div class="section-header" style="text-align:center; margin-bottom:0;">
+    <p class="label reveal" style="font-size:11px; letter-spacing:0.3em; text-transform:uppercase; color:var(--red); margin-bottom:16px;">How It Works</p>
+    <h2 class="reveal reveal-delay-1" style="font-family:'Bebas Neue',sans-serif; font-size:clamp(36px,5vw,60px); letter-spacing:0.05em;">入会までの流れ</h2>
+  </div>
+  <div class="flow-steps">
+    <div class="flow-step reveal">
+      <div class="flow-num">01</div>
+      <h3 class="flow-title">無料体験</h3>
+      <p class="flow-desc">まずは無料体験へ。トレーニング体験と詳しいカウンセリングを実施します。</p>
+    </div>
+    <div class="flow-step reveal reveal-delay-1">
+      <div class="flow-num">02</div>
+      <h3 class="flow-title">目標設定</h3>
+      <p class="flow-desc">あなたの目標・体の状態・生活習慣をヒアリング。最適なプランを提案します。</p>
+    </div>
+    <div class="flow-step reveal reveal-delay-2">
+      <div class="flow-num">03</div>
+      <h3 class="flow-title">プログラム作成</h3>
+      <p class="flow-desc">完全個別のトレーニングプログラムと食事プランを作成します。</p>
+    </div>
+    <div class="flow-step reveal reveal-delay-3">
+      <div class="flow-num">04</div>
+      <h3 class="flow-title">トレーニング開始</h3>
+      <p class="flow-desc">いよいよスタート！毎回の記録をもとにプログラムを継続的に改善します。</p>
+    </div>
+    <div class="flow-step reveal" style="transition-delay:0.4s;">
+      <div class="flow-num">05</div>
+      <h3 class="flow-title">目標達成</h3>
+      <p class="flow-desc">目標達成後もセルフマネジメントできるようサポート。リバウンドしない体づくりを。</p>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="section-cta" id="cta">
+  <div class="cta-inner">
+    <div class="reveal">
+      <h2 class="cta-title">今すぐ<br>変わろう。</h2>
+      <p class="cta-sub">無料体験受付中。まずは一歩踏み出すだけでいい。<br>あとは私たちが全力でサポートします。</p>
+    </div>
+    <div class="cta-box reveal reveal-delay-2">
+      <p class="cta-offer">初回限定オファー</p>
+      <div class="cta-price">無料</div>
+      <p class="cta-price-note">体験トレーニング（60分）+ カウンセリング</p>
+      <a href="reservation_gym.html" class="btn-white">無料体験を予約する</a>
+      <p class="cta-note">※ 定員になり次第終了となります</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">APE<span>X</span> GYM</div>
+  <p class="footer-copy">© 2025 APEX GYM. All rights reserved.</p>
+</footer>
+
+<script>
+  const reveals = document.querySelectorAll('.reveal');
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.08 });
+  reveals.forEach(el => obs.observe(el));
+</script>
+</body>
+</html>
